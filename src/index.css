@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for full-screen responsive layout */
+@layer components {
+  .dashboard-container {
+    @apply h-full w-full overflow-hidden;
+  }
+  
+  .dashboard-content {
+    @apply h-full overflow-auto;
+  }
+  
+  .responsive-grid {
+    @apply grid gap-3 md:gap-4 lg:gap-6;
+  }
+  
+  .responsive-text {
+    @apply text-sm md:text-base lg:text-lg;
+  }
+  
+  .responsive-padding {
+    @apply p-3 md:p-4 lg:p-6;
+  }
+}
+
+/* Ensure full height for all elements */
+html, body, #root {
+  height: 100%;
+}
+
+/* Custom scrollbar for better UX */
+.dashboard-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dashboard-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
