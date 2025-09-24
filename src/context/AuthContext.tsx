@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const initialState = {
     user: null,
     token: null,
-    isLoading: false,
+    isLoading: true,
     isAuthenticated: false,
   };
   
@@ -84,9 +84,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Error parsing user data:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        dispatch({ type: 'SET_LOADING', payload: false });
       }
     } else {
       console.log('AuthContext: No stored session found');
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   }, []);
 

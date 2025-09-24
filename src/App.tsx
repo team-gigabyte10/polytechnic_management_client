@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
@@ -11,6 +10,10 @@ import GuestTeachers from './pages/GuestTeachers';
 import NotFound from './pages/NotFound';
 import Teachers from './pages/Teachers';
 import Students from './pages/Students';
+import Departments from './pages/Departments';
+import Schedule from './pages/Schedule';
+import Subjects from './pages/Subjects';
+import AttendancePage from './pages/Attendance';
 
 function App() {
   console.log('App component rendering');
@@ -60,6 +63,17 @@ function App() {
               />
               
               <Route
+                path="/departments"
+                element={
+                  <ProtectedRoute roles={['admin']}>
+                    <MainLayout>
+                      <Departments />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              
+              <Route
                 path="/students"
                 element={
                   <ProtectedRoute>
@@ -84,7 +98,27 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <MainLayout>
-                      <div className="p-6"><h1 className="text-2xl font-bold">Schedule - Coming Soon</h1></div>
+                      <Schedule />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/subjects"
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <Subjects />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/attendance"
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <AttendancePage />
                     </MainLayout>
                   </ProtectedRoute>
                 }

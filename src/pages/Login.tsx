@@ -23,51 +23,18 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
-  
-  // Safely use the auth context with error handling
-  let authContext;
-  try {
-    authContext = useAuth();
-  } catch (error) {
-    console.error('Error accessing auth context:', error);
-    // Fallback to local state if context is not available
-    authContext = {
-      login: async () => {},
-      isLoading: false,
-      isAuthenticated: false,
-    };
-  }
-
-  const { login, isLoading: contextLoading, isAuthenticated } = authContext;
+  const { login, isLoading: contextLoading, isAuthenticated } = useAuth();
   const isLoading = contextLoading || localLoading;
 
   // Navigate to dashboard when authentication state changes
   useEffect(() => {
-    console.log('Login component mounted, auth state:', { isAuthenticated });
     if (isAuthenticated) {
-      console.log('User authenticated, navigating to dashboard');
-      // Add a small delay to ensure the state is fully propagated
       const timer = setTimeout(() => {
-        console.log('Timer fired, navigating to dashboard');
         navigate('/dashboard');
-      }, 100);
-      
+      }, 50);
       return () => clearTimeout(timer);
     }
   }, [isAuthenticated, navigate]);
-
-  // If user is already authenticated, redirect immediately
-  if (isAuthenticated) {
-    console.log('Login: User already authenticated, redirecting');
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 flex items-center justify-center p-4">
-        <div className="text-white text-center">
-          <LoadingSpinner size="lg" />
-          <p className="mt-4">Redirecting to dashboard...</p>
-        </div>
-      </div>
-    );
-  }
 
   const {
     register,
@@ -84,18 +51,29 @@ const Login: React.FC = () => {
   const onSubmit = async (data: FormData) => {
     try {
       setLocalLoading(true);
-      console.log('Attempting login with:', data);
       await login(data.email, data.password);
-      console.log('Login completed, waiting for state update');
       toast.success('Login successful!');
+      navigate('/dashboard');
     } catch (error: any) {
-      console.error('Login error in component:', error);
-      toast.error(error.response?.data?.message || error.message || 'Login failed');
+      toast.error(error?.response?.data?.message || error?.message || 'Login failed');
     } finally {
       setLocalLoading(false);
     }
   };
 
+  // If user is already authenticated, show loading redirect
+  if (isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 flex items-center justify-center p-4">
+        <div className="text-white text-center">
+          <LoadingSpinner size="lg" />
+          <p className="mt-4">Redirecting to dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Main login form
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 flex items-center justify-center p-4">
       <motion.div

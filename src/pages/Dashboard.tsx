@@ -64,8 +64,8 @@ const Dashboard: React.FC = () => {
       bgColor: 'from-purple-50 to-indigo-50',
     },
     {
-      title: 'Courses',
-      value: dashboardData?.counts.courses || 0,
+      title: 'Departments',
+      value: dashboardData?.counts.departments || 0,
       icon: BookOpen,
       color: 'from-orange-500 to-red-500',
       bgColor: 'from-orange-50 to-red-50',

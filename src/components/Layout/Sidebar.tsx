@@ -13,6 +13,8 @@ import {
   Bell,
   LogOut,
   X,
+  Building2,
+  CheckSquare,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -51,11 +53,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
 
   const menuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+    { icon: Building2, label: 'Departments', path: '/departments', roles: ['admin'] },
     { icon: Users, label: 'Students', path: '/students', roles: ['admin', 'teacher'] },
     { icon: GraduationCap, label: 'Teachers', path: '/teachers', roles: ['admin'] },
     { icon: UserCheck, label: 'Guest Teachers', path: '/guest-teachers', roles: ['admin'] },
     { icon: Calendar, label: 'Schedule', path: '/schedule' },
-    { icon: BookOpen, label: 'Courses', path: '/courses', roles: ['admin', 'teacher'] },
+    { icon: BookOpen, label: 'Subjects', path: '/subjects', roles: ['admin', 'teacher'] },
+    { icon: CheckSquare, label: 'Attendance', path: '/attendance' },
     { icon: ClipboardList, label: 'Marks', path: '/marks', roles: ['admin', 'teacher'] },
     { icon: Banknote, label: 'Accounts', path: '/accounts', roles: ['admin'] },
     { icon: Bell, label: 'Notifications', path: '/notifications' },
@@ -80,44 +84,31 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         initial={{ x: isLg ? 0 : -280 }}
         animate={{ x: isLg ? 0 : (isOpen ? 0 : -280) }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="fixed left-0 top-0 h-full w-64 sm:w-70 bg-white/80 backdrop-blur-xl border-r border-gray-200/50 shadow-xl z-50 lg:static lg:translate-x-0"
+        className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 sm:w-70 bg-gradient-to-b from-gray-600 via-gray-700 to-black text-white backdrop-blur-xl border-r border-white/10 shadow-xl z-50 lg:static lg:translate-x-0 lg:top-0 lg:h-full"
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-4 md:p-6 border-b border-gray-200/50">
+          <div className="p-4 md:p-6 border-b border-white/10">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2 md:space-x-3">
-                <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-white/20 border border-white/30 rounded-lg flex items-center justify-center">
                   <GraduationCap className="w-5 h-5 md:w-6 md:h-6 text-white" />
                 </div>
                 <div className="hidden sm:block">
-                  <h2 className="text-base md:text-lg font-bold text-gray-900">PMS</h2>
-                  <p className="text-xs text-gray-600">Management System</p>
+                  <h2 className="text-base md:text-lg font-bold text-white">PMS</h2>
+                  <p className="text-xs text-white/80">Management System</p>
                 </div>
               </div>
               <button
                 onClick={toggleSidebar}
-                className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+                className="lg:hidden p-2 rounded-lg hover:bg-white/10 text-white"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          {/* User Info */}
-          <div className="p-3 md:p-4 border-b border-gray-200/50">
-            <div className="flex items-center space-x-2 md:space-x-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
-                <span className="text-sm font-semibold text-white">
-                  {user?.name?.charAt(0)}
-                </span>
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                <p className="text-xs text-gray-600 capitalize">{user?.role}</p>
-              </div>
-            </div>
-          </div>
+
 
           {/* Navigation */}
           <nav className="flex-1 p-3 md:p-4">
@@ -130,8 +121,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                       to={item.path}
                       className={`flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 rounded-lg transition-all duration-200 ${
                         isActive
-                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
-                          : 'text-gray-700 hover:bg-gray-100/80 hover:text-blue-600'
+                          ? 'bg-white/20 text-white shadow-md ring-1 ring-white/30'
+                          : 'text-white/90 hover:bg-white/10 hover:text-white'
                       }`}
                     >
                       <item.icon className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
@@ -144,10 +135,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           </nav>
 
           {/* Logout */}
-          <div className="p-3 md:p-4 border-t border-gray-200/50">
+          <div className="p-3 md:p-4 border-t border-white/10">
             <button
               onClick={logout}
-              className="flex items-center space-x-2 md:space-x-3 w-full px-3 md:px-4 py-2 md:py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
+              className="flex items-center space-x-2 md:space-x-3 w-full px-3 md:px-4 py-2 md:py-3 text-white/90 hover:bg-white/10 hover:text-white rounded-lg transition-all duration-200"
             >
               <LogOut className="w-4 h-4 md:w-5 md:h-5" />
               <span className="text-xs md:text-sm font-medium">Logout</span>
